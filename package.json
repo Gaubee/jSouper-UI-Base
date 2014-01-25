@@ -1,30 +1,24 @@
 {
-  "name": "jSouper.metro-UI",
-  "version": "0.1.0",
-  "description": "jSouper UI,base on Metro UI CSS 2.0(https://github.com/olton/Metro-UI-CSS)",
-  "dependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-jshint": "~0.6.0",
-    "grunt-contrib-nodeunit": "~0.2.0",
-    "grunt-contrib-uglify": "~0.2.2",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-watch": "*",
-    "connect-livereload": "*",
-    "grunt-contrib-connect": "*",
-    "grunt-wrap": "*",
-    "grunt-notify": "*"
-  },
-  "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-peon-gui": "~1.0.0",
-    "grunt-notify": "~0.2.16"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "view"
-  ],
-  "author": "Gaubee",
-  "license": "MIT"
+    "name": "jSouper.base-UI",
+    "version": "0.1.0",
+    "description": "jSouper Base UI",
+    "dependencies": {
+        "grunt": "~0.4.1",
+        "grunt-contrib-watch": "*",
+        "grunt-contrib-concat": "*",
+        "grunt-wrap": "*",
+        "grunt-contrib-uglify": "*",
+        "grunt-contrib-cssmin": "*"
+    },
+    "devDependencies": {
+        "grunt": "~0.4.1"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "view"
+    ],
+    "author": "Gaubee",
+    "license": "MIT"
 }

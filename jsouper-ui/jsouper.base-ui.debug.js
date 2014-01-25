@@ -1,5 +1,3 @@
-!(function jSouperUI(global) {
-
 //表单初始化，通用配置函数
 jSouper.initFormVM = initVM;
 
@@ -68,6 +66,3 @@ function init_widgets() {
         Url: _baseUrl + "jsouper.base-ui.xmp"
     })
 }
-
-
-}(this));

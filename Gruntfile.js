@@ -4,10 +4,12 @@ module.exports = function(grunt) {
     //load all grunt tasks
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-wrap');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
 
     //define tasks
     grunt.registerTask('server', ['watch']);
-
     //grunt config
     grunt.initConfig({
         //======== 配置相关 ========
@@ -20,9 +22,44 @@ module.exports = function(grunt) {
                 src: 'jsouper-ui/widgets/*.*',
                 dest: 'jsouper-ui/jsouper.base-ui.xmp'
             },
-            css:{
+            //合并基础样式表
+            css: {
                 src: 'jsouper-ui/css/*.css',
                 dest: 'jsouper-ui/jsouper.base-ui.css'
+            },
+            //合并js文件
+            js: {
+                src: ['jsouper-ui/src/*.js', 'jsouper-ui/src/html5attr/*.js'],
+                dest: 'jsouper-ui/jsouper.base-ui.debug.js'
+            }
+        },
+        //包裹合并后的js文件
+        wrap: {
+            basic: {
+                src: ['jsouper-ui/jsouper.base-ui.debug.js'],
+                dest: 'jsouper-ui/jsouper.base-ui.js',
+                options: {
+                    wrapper: ['!(function jSouperUI(global) {\n', '\n}(this));']
+                }
+            }
+        },
+        //压缩js
+        uglify: {
+            options: {
+                beautify: false
+            },
+            my_target: {
+                files: {
+                    'jsouper-ui/jsouper.base-ui.min.js': ['jsouper-ui/jsouper.base-ui.js']
+                }
+            }
+        },
+        //压缩css
+        cssmin: {
+            combine: {
+                files: {
+                    'jsouper-ui/jsouper.base-ui.min.css': ['jsouper-ui/jsouper.base-ui.css']
+                }
             }
         },
         //文件监听
@@ -31,9 +68,13 @@ module.exports = function(grunt) {
                 files: ['jsouper-ui/widgets/**'],
                 tasks: ['concat:widgets']
             },
-            css:{
+            css: {
                 files: ['jsouper-ui/css/**'],
-                tasks: ['concat:css']
+                tasks: ['concat:css', "cssmin"]
+            },
+            js: {
+                files: ['jsouper-ui/src/**', 'jsouper-ui/src/html5attr/**'],
+                tasks: ['concat:js', "wrap", "uglify"]
             }
         }
 
