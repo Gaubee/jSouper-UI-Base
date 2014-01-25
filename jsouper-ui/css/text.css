@@ -34,6 +34,14 @@
     position: relative;
     overflow: hidden;
 }
+.jsouper-ui inputWrap.disabledMask{
+	background-color: #ebebe4;
+	color:#545454;
+}
+.jsouper-ui inputWrap placeholder{
+	color:#A9A9A9;
+}
+
 .jsouper-ui-input-text {
     background: none;
     border: 0;
@@ -47,17 +55,6 @@
 .jsouper-ui-input-text:focus {
     outline: none;
 }
-.jsouper-ui disabledMask{
-	background-color: #000;
-	opacity: 0.1;
-	position: absolute;
-	z-index: 2;
-	height: 100%;
-	width: 100%;
-	/*padding-top:1px*/
-	margin-top: -1px;
-}
-
 .jsouper-ui autocomplete {
     position: relative;
     z-index: 2;

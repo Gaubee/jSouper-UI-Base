@@ -3,19 +3,16 @@
         {{#if label}}
         <label>{{label}}</label>
         {{/if}}
-        <inputWrap>
-            {{#layout 'form.text.disabledMask','$THIS',disabled}}
+        <inputWrap class="{{#if disabled}}disabledMask{{/if}}">
             <!-- placeholder = "{{placeholder}}" -->
             {{#layout 'form.text.placeholder','$THIS',placeholder&&(!value)}}
-            <input type="text" class="jsouper-ui-input-text" jsouper-ui-id="{{__jsouper_ui_id}}" value="{{value}}" accessKey="{{accessKey}}" alt="{{alt}}" defaultValue="{{defaultValue}}" disabled="{{disabled}}" id="{{id}}" maxLength="{{maxLength}}" name="{{name}}" readOnly="{{readOnly}}" size="{{size}}" tabIndex="{{tabIndex}}" autocomplete="{{#if __autocomplete}}on{{#else}}off{{/if}}" form="{{'value'}}">{{#layout 'form.text.autocomplete','$THIS',__close_sys_ac&&value&&__isFocus}}
+            <input type="text" class="jsouper-ui-input-text" jsouper-ui-id="{{__jsouper_ui_id}}" value="{{value}}" accessKey="{{accessKey}}" alt="{{alt}}" defaultValue="{{defaultValue}}" disabled="{{disabled}}" id="{{id}}" maxLength="{{maxLength}}" name="{{name}}" readOnly="{{readOnly}}" size="{{size}}" tabIndex="{{tabIndex}}" autocomplete="{{#if __autocomplete}}on{{#else}}off{{/if}}" form="{{'value'}}">
+            {{#layout 'form.text.autocomplete','$THIS',__close_sys_ac&&value&&__isFocus}}
         </inputWrap>
     </formText>
 </xmp>
 <xmp type='template' name='form.text.placeholder'>
     <placeholder>{{placeholder}}</placeholder>
-</xmp>
-<xmp type='template' name='form.text.disabledMask'>
-    <disabledMask></disabledMask>
 </xmp>
 <xmp type='template' name='form.text.autocomplete'>
     <autocomplete>
