@@ -1,0 +1,84 @@
+
+.jsouper-ui placeholder {
+    width: 0;
+    height: 0;
+    color:#999;
+    position: relative;
+    left: 2px;
+    z-index: 0;
+    line-height: 100%;
+    display: inline-block;
+    *zoom:1;
+}
+.jsouper-ui inputWrap {
+    border: 1px inset;
+    /*border: 2px inset;*/
+    border-image-source: initial;
+    border-image-slice: initial;
+    border-image-width: initial;
+    border-image-outset: initial;
+    border-image-repeat: initial;
+    margin: 0em;
+    color: initial;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    *zoom:1;
+    text-align: start;
+    height: 18px;
+    padding: 1px 0px;
+    width: 160px;
+    position: relative;
+    overflow: hidden;
+}
+.jsouper-ui-input-text {
+    background: none;
+    border: 0;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    font-size: inherit;
+    color: inherit;
+}
+.jsouper-ui-input-text:focus {
+    outline: none;
+}
+.jsouper-ui disabledMask{
+	background-color: #000;
+	opacity: 0.1;
+	position: absolute;
+	z-index: 2;
+	height: 100%;
+	width: 100%;
+	/*padding-top:1px*/
+	margin-top: -1px;
+}
+
+.jsouper-ui autocomplete {
+    position: relative;
+    z-index: 2;
+    display: block;
+    *zoom:1;
+    left: -1px;
+    top:0;
+    height: 0;
+}
+.jsouper-ui autocompleteWrap{
+    display: block;
+    position: absolute;
+    border:1px solid #d2d4d8;
+    background-color: #FFF;
+}
+.jsouper-ui autocompleteItem {
+    display: block;
+    height: 23px;
+    line-height: 23px;
+    padding: 0 3px;
+}
+.jsouper-ui autocompleteItem:hover{
+	background-color: #d2d4d8;
+}

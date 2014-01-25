@@ -1,0 +1,53 @@
+<xmp type='template' name="form.checkbox">
+    <div bind-class="{{class}}">
+        {{#if label}}
+        <label>{{label}}</label>
+        {{/if}} {{#each items}}
+        <div class="input-control checkbox" data-role="input-control">
+            <label>
+                <input type="checkbox" bind-name="{{$PARENT.name}}" bind-value="{{value}}" bind-checked="{{selected}}" bind-form="{{'selected'}}" />
+                <span class="check"></span>
+                {{key}}
+            </label>
+        </div>
+        {{/each}}
+    </div>
+</xmp>
+<script type="text/vm" name="form.checkbox">
+(function() {
+    function initVM(vm) {
+        var model = vm.model;
+        var data = model._database || {};
+        var value = data.value;
+        var valueObserver = Model.Observer(function getter(key, old_value, currentKey) {
+            var formatKey = (currentKey === "value" ? "" : currentKey.substr(0, currentKey.length - 5 /*currentKey.length-'value'.length*/ )) + "items";
+            var items = jSouper.$.s(this.get(formatKey));
+            var result = [];
+            jSouper.$.E(items, function(item, index) {
+                if (item.selected) {
+                    result.push(item.value);
+                }
+            });
+            return result;
+        }, function setter(key, value, currentKey) {
+            var formatKey = (currentKey === "value" ? "" : currentKey.substr(0, currentKey.length - 5 /*currentKey.length-'value'.length*/ )) + "items";
+            var items = jSouper.$.s(this.get(formatKey));
+            jSouper.$.E(jSouper.$.s(value), function(item, index) {
+                for (var i = 0, len = items.length; i < len; i += 1) {
+                    if (items[i].selected = (items[i].value === item)) {
+                        //不做多余的判断
+                        items.splice(i, 1);
+                        i -= 1;
+                        len -= 1;
+                    }
+                }
+            })
+            this.touchOff(formatKey);
+        });
+        data.value = valueObserver;
+        model.set("value", value);
+        return value;
+    };
+    return initVM;
+}());
+</script>

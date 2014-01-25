@@ -1,0 +1,17 @@
+
+<xmp type='template' name="form.radio">
+    <div bind-class="{{class}}">
+	{{#if label}}
+	<label>{{label}}</label>
+	{{/if}}
+    {{#each items}}
+        <div class="input-control radio default-style" data-role="input-control">
+            <label>
+                <input type="radio" bind-name="{{$PARENT.name}}" bind-value="{{value}}" bind-checked="{{$PARENT.value}}" bind-form="{{'$PARENT.value'}}"/>
+                <span class="check"></span>
+                {{key}}
+            </label>
+        </div>
+    {{/each}}
+    </div>
+</xmp>

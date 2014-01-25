@@ -1,0 +1,18 @@
+<xmp type='template' name='form.number'>
+    <div bind-class="{{class}}">
+        {{#if label}}
+        <label>{{label}}</label>
+        {{/if}}
+        <div class="input-control number" data-role="input-control">
+            <input type="text" placeholder="{{placeholder}}" bind-value="{{value}}" bind-form="{{'value'}}">
+        </div>
+    </div>
+</xmp>
+<script type="text/vm" name="form.number">
+(function(argument) {
+    function initVM(vm) {
+        jSouper.initFormVM(vm);
+    }
+    return initVM;
+}());
+</script>

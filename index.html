@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Base UI- jSouper</title>
+    <!-- 引入框架 -->
+    <script type="text/javascript" src="../../build/jSouper.js"></script>
+    <!-- 引入Metro UI的安装程序 -->
+    <script type="text/javascript" src="./jsouper-ui/jsouper.base-ui.js"></script>
+    <!-- 引入应用程序 -->
+    <script type="text/javascript" src="./index.js"></script>
+</head>
+
+<body>
+    <xmp id="jSouper-base" class="jsouper-ui">
+        <form>
+            <fieldset>
+                <legend>登录</legend>
+                {{#layout 'formset','form.login'}}
+            </fieldset>
+            <fieldset>
+                <legend>注册</legend>
+                {{#layout 'formset','form.register'}}
+            </fieldset>
+        </form>
+    </xmp>
+</body>
+
+</html>

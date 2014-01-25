@@ -1,0 +1,15 @@
+
+<xmp type='template' name='form.select'>
+    <div bind-class="{{class}}">
+		{{#if label}}
+		<label>{{label}}</label>
+		{{/if}}
+		<div class="input-control select">
+		    <select bind-name="{{name}}" bind-value="{{value}}" bind-form="{{'value'}}" bind-multiple="{{multiple}}" size="{{size}}" >
+			    {{#each items}}
+					<option bind-value="{{value}}">{{key}}</option>
+				{{/each}}
+		    </select>
+		</div>
+	</div>
+</xmp>
