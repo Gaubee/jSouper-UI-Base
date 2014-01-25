@@ -1,14 +1,21 @@
-//表单初始化，通用配置函数
-jSouper.initFormVM = initVM;
+/*
+ * 表单初始化，通用配置函数
+ */
 
-function initVM(vm) {
+//注意：这里由于其它属性中有也使用到事件绑定等功能，所以初始化一般要放到最后一部，来统一绑定属性
+
+function _initVM(vm) {
     var model = vm.model;
     var data = model._database || {};
     var attrs = data.attrs,
         attrKey, attrValue, defaultAttrValue;
     var events = data.events,
         eventKey, eventValue;
-    var formatAttr = {};
+    var formatAttr = {
+        "__jsouper_ui_id": "{{__jsouper_ui_id}}"
+    };
+    //设定唯一标志
+    vm.set("__jsouper_ui_id", jSouper.$.hashCode(vm, "__jsouper_ui_id"));
     //绑定自定义属性
     if (attrs) {
         for (attrKey in attrs) {
@@ -31,6 +38,7 @@ function initVM(vm) {
             }
         }
     }
+    //添置属性
     vm.addAttr(vm.queryElement({
         tagName: "INPUT"
     }), formatAttr);

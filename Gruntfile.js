@@ -10,6 +10,8 @@ module.exports = function(grunt) {
 
     //define tasks
     grunt.registerTask('server', ['watch']);
+
+    var jsFiles = ['jsouper-ui/src/*.js', 'jsouper-ui/src/html5attr/*.js', 'jsouper-ui/src/modulesInit/*.js']
     //grunt config
     grunt.initConfig({
         //======== 配置相关 ========
@@ -29,7 +31,7 @@ module.exports = function(grunt) {
             },
             //合并js文件
             js: {
-                src: ['jsouper-ui/src/*.js', 'jsouper-ui/src/html5attr/*.js'],
+                src: jsFiles,
                 dest: 'jsouper-ui/jsouper.base-ui.debug.js'
             }
         },
@@ -73,7 +75,7 @@ module.exports = function(grunt) {
                 tasks: ['concat:css', "cssmin"]
             },
             js: {
-                files: ['jsouper-ui/src/**', 'jsouper-ui/src/html5attr/**'],
+                files: jsFiles,
                 tasks: ['concat:js', "wrap", "uglify"]
             }
         }
