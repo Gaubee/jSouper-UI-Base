@@ -125,7 +125,7 @@ function _initAutoComplete(vm) {
     //缓存自动完成的节点
     var autocompleteWrapNode;
 
-    function autocompleteHandle(value) { //默认处理函数
+    function systemAutocompleteHandle(value) { //默认处理函数
         var result = [];
         var valueReg = RegExp(value, "gi");
         jSouper.$.E(jSouper.$.s(acArray), function(autocompleteItem) {
@@ -147,7 +147,7 @@ function _initAutoComplete(vm) {
                 acHandle = acArray = value;
             } else {
                 //数组型
-                acHandle = autocompleteHandle;
+                acHandle = systemAutocompleteHandle;
                 acArray = value;
             }
             vm.set("__system.attrs.autocomplete", false);
@@ -243,11 +243,53 @@ function __initAutofocus(vm) {
 function __initPattern(vm) {
     var model = vm.model;
     var data = model._database;
-    var pattern = data.pattern;
+    /*
+     * 格式验证的拓展
+     */
+    //三种参数形式：
+    //正则型
+    //字符型，编译成正则
+    //函数型，根据value返回错误提示信息
+
+    //缓存input节点
+    var inputNode = vm.queryElement({
+        tagName: "INPUT"
+    })[0];
+    //不论系统是否支持pattern属性，统一用自定义的。这样样式能得到统一
+    //闭包保存的正则验证
+    var pattern;
+    var patternHandle = systemPatternHandle;
+
+    function systemPatternHandle(value) {
+
+    };
+
+    function _setParameter(value) {
+        if (typeof value === "string") {
+            pattern = new RegExp(value);
+        } else if (value instanceof RegExp) {
+            pattern = value
+        } else if (value instanceof Function) {
+            pattern = null;
+
+        } else {
+            throw TypeError("Error Parameter Type!");
+        }
+    };
+    data.pattern && _setParameter(data.pattern);
+
     data.pattern = Model.Observer(function getter(key, old_value, currentKey) {
 
     }, function setter(key, value, currentKey) {
-        
+        //这里无需绑定，所以setter无需返回值，因此，如果是系统的set(get())，value将是空的
+        if (value) {
+            _setParameter(value);
+        }
+    });
+
+    vm.set("__system.events.autocomplete.click", function(e, currentVM) {
+        vm.set("value", currentVM.get());
+        vm.set("__system.attrs.isFocus", false)
     });
 }
 

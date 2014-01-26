@@ -6,8 +6,7 @@
         <inputWrap class="{{#if disabled}} disabledMask{{/if}}{{#if __system.attrs.isFocus}} focusInput{{/if}} ">
             <!-- placeholder = "{{placeholder}}" -->
             {{#layout 'form.text.placeholder','$THIS',placeholder&&(!value)}}
-            <input type="text" class="jsouper-ui-input-text" value="{{value}}" accessKey="{{accessKey}}" alt="{{alt}}" defaultValue="{{defaultValue}}" disabled="{{disabled}}" id="{{id}}" maxLength="{{maxLength}}" name="{{name}}" readOnly="{{readOnly}}" size="{{size}}" tabIndex="{{tabIndex}}" autocomplete="{{#if __system.attrs.autocomplete}}on{{#else}}off{{/if}}" input="{{'value'}}">
-            {{#layout 'form.text.autocomplete','$THIS',__system.attrs.close_sys_ac&&value&&__system.attrs.isFocus}}
+            <input type="text" class="jsouper-ui-input-text" value="{{value}}" accessKey="{{accessKey}}" alt="{{alt}}" defaultValue="{{defaultValue}}" disabled="{{disabled}}" id="{{id}}" maxLength="{{maxLength}}" name="{{name}}" readOnly="{{readOnly}}" size="{{size}}" tabIndex="{{tabIndex}}" autocomplete="{{#if __system.attrs.autocomplete}}on{{#else}}off{{/if}}" input="{{'value'}}">{{#layout 'form.text.autocomplete','autocomplete',__system.attrs.close_sys_ac&&value&&__system.attrs.isFocus}} {{#layout 'form.text.pattern','pattern',__system.attrs.pattern}}
         </inputWrap>
     </formText>
 </xmp>
@@ -17,9 +16,17 @@
 <xmp type='template' name='form.text.autocomplete'>
     <autocomplete>
         <autocompleteWrap>
-            {{#each autocomplete}}
-            <autocompleteItem event-mousedown="{{'$PARENT.__system.events.autocomplete.click'}}">{{$THIS}}</autocompleteItem>
+            {{#each $THIS}}
+            <autocompleteItem event-mousedown="{{'$PARENT.$PARENT.__system.events.autocomplete.click'}}">{{$THIS}}</autocompleteItem>
             {{/each}}
         </autocompleteWrap>
     </autocomplete>
+</xmp>
+<xmp type='template' name='form.text.pattern'>
+    <pattern>
+        <patternHead>请与所请求的格式保持一致</patternHead>
+        <patternContent>
+            {{title}}
+        </patternContent>
+    </pattern>
 </xmp>

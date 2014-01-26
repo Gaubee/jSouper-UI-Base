@@ -20,7 +20,7 @@ function _initAutoComplete(vm) {
     //缓存自动完成的节点
     var autocompleteWrapNode;
 
-    function autocompleteHandle(value) { //默认处理函数
+    function systemAutocompleteHandle(value) { //默认处理函数
         var result = [];
         var valueReg = RegExp(value, "gi");
         jSouper.$.E(jSouper.$.s(acArray), function(autocompleteItem) {
@@ -42,7 +42,7 @@ function _initAutoComplete(vm) {
                 acHandle = acArray = value;
             } else {
                 //数组型
-                acHandle = autocompleteHandle;
+                acHandle = systemAutocompleteHandle;
                 acArray = value;
             }
             vm.set("__system.attrs.autocomplete", false);
