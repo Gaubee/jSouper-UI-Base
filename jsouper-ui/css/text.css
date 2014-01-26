@@ -29,13 +29,17 @@
     *zoom:1;
     text-align: start;
     height: 18px;
-    padding: 1px 0px;
     width: 160px;
 }
+
 .jsouper-ui inputWrap.disabledMask{
 	background-color: #ebebe4;
 	color:#545454;
 }
+.jsouper-ui inputWrap.focusInput{
+    outline:1px inset #A4C6FD;
+}
+
 .jsouper-ui inputWrap placeholder{
 	color:#A9A9A9;
 }
@@ -43,6 +47,7 @@
 .jsouper-ui-input-text {
     background: none;
     border: 0;
+    padding: 0;
     height: 100%;
     width: 100%;
     position: relative;
@@ -51,8 +56,9 @@
     color: inherit;
 }
 .jsouper-ui-input-text:focus {
-    outline: none;
+    outline:none;
 }
+
 .jsouper-ui autocomplete {
     position: relative;
     z-index: 2;

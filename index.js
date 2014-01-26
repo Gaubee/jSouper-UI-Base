@@ -18,6 +18,7 @@ jSouper.ready(function() {
                     //     return result;
                     // },
                     // autocomplete:true,
+                    autofocus:true,
                     attrs:{
                         id:"test",
                         title:"{{placeholder}}"
@@ -26,7 +27,10 @@ jSouper.ready(function() {
                         click:function (e,vi) {
                             console.log(e.type);
                         },
-                        dbclick:"{{'events.click'}}"
+                        dbclick:"{{'events.click'}}",
+                        mouseenter:function (e,vi) {
+                            console.log("mouseEnter!!");
+                        }
                     }
                 }, {
                     type: "password",

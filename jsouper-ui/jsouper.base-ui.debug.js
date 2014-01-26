@@ -208,10 +208,31 @@ function _initAutoComplete(vm) {
     });
 };
 
+function __initAutofocus(vm) {
+    var data = vm.model._database;
+    if (data.autofocus) {
+        //缓存input节点
+        var inputNode = vm.queryElement({
+            tagName: "INPUT"
+        })[0];
+        console.log(inputNode);
+        //页面加载时显示
+        (data.events || (data.events = {}))["ready-autofocus"] = function(e, currentVM) {
+            //确保在第一波View已经在append到页面上时，才进行自动对焦
+            setTimeout(function() {
+                inputNode.focus();
+            })
+        };
+    }
+};
+
 jSouper.modulesInit["form.text"] = function(vm) {
 
     //添加自动完成功能
     _initAutoComplete(vm);
+
+    //添加自动对焦功能
+    __initAutofocus(vm);
 
     //进行通用的表单初始化函数进行初始化配置
     _initVM(vm);
