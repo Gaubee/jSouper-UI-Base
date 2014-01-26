@@ -6,20 +6,6 @@ function _initAutoComplete(vm) {
     var data = model._database || {};
 
     /*
-     * 自动完成的基础交互逻辑
-     */
-    //输入时显示自动提示
-    (data.events || (data.events = {}))["focus-show-autocomplete"] = function(e, currentVM) {
-        vm.set('__system.attrs.isFocus', true);
-    };
-    //离开时隐藏自动提示
-    (data.events || (data.events = {}))["blur-hide-autocomplete"] = function(e, currentVM) {
-        setTimeout(function() {
-            vm.set('__system.attrs.isFocus', false);
-        });
-    };
-
-    /*
      * 自动完成的拓展
      */
     //三种参数形式：
@@ -125,7 +111,7 @@ function _initAutoComplete(vm) {
         return acArray;
     });
 
-    vm.set("__system.events.autocomplete", function(e, currentVM) {
+    vm.set("__system.events.autocomplete.click", function(e, currentVM) {
         vm.set("value", currentVM.get());
         vm.set("__system.attrs.isFocus", false)
     });

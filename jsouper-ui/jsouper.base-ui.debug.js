@@ -11,11 +11,37 @@ function _initVM(vm) {
         attrKey, attrValue, defaultAttrValue;
     var events = data.events,
         eventKey, eventValue;
+    //唯一标志，极大概念地避免与用户的冲突
+    var hashCode = jSouper.$.hashCode(vm, "jsouper_ui_id");
+
+    //添加系统属性
     var formatAttr = {
-        "__jsouper_ui_id": "{{__system.attrs.id}}"
+        //唯一标志
+        "jsouper_ui_id": "{{__system.attrs.id}}"
     };
-    //设定唯一标志
-    vm.set("__system.attrs.id", jSouper.$.hashCode(vm, "jsouper_ui_id"));
+
+    //添加系统事件
+    jSouper.$.fI({
+        //聚焦时的属性
+        "event-focus-isFocus": function(e, currentVM) {
+            vm.set('__system.attrs.isFocus', true);
+        },
+        //失去焦点的属性
+        "event-hide-isFocus": function(e, currentVM) {
+            setTimeout(function() {
+                vm.set('__system.attrs.isFocus', false);
+            });
+        }
+    }, function(value, key) {
+        var mainKey = key.split("-"); //0:event-    1:event_name-    2:mainKey
+        var formatMainKey = "__system.events." + mainKey[2] + "." + mainKey[1];
+        console.log(formatMainKey);
+        formatAttr[key + hashCode] = "{{'" + formatMainKey + "'}}";
+        vm.set(formatMainKey, value);
+    });
+
+    //初始化唯一标志
+    vm.set("__system.attrs.id", hashCode);
     //绑定自定义属性
     if (attrs) {
         for (attrKey in attrs) {
@@ -42,7 +68,7 @@ function _initVM(vm) {
     vm.addAttr(vm.queryElement({
         tagName: "INPUT"
     }), formatAttr);
-}
+};
 
 var _baseUrl = "./jsouper-ui/";
 
@@ -81,20 +107,6 @@ function init_widgets() {
 function _initAutoComplete(vm) {
     var model = vm.model;
     var data = model._database || {};
-
-    /*
-     * 自动完成的基础交互逻辑
-     */
-    //输入时显示自动提示
-    (data.events || (data.events = {}))["focus-show-autocomplete"] = function(e, currentVM) {
-        vm.set('__system.attrs.isFocus', true);
-    };
-    //离开时隐藏自动提示
-    (data.events || (data.events = {}))["blur-hide-autocomplete"] = function(e, currentVM) {
-        setTimeout(function() {
-            vm.set('__system.attrs.isFocus', false);
-        });
-    };
 
     /*
      * 自动完成的拓展
@@ -202,7 +214,7 @@ function _initAutoComplete(vm) {
         return acArray;
     });
 
-    vm.set("__system.events.autocomplete", function(e, currentVM) {
+    vm.set("__system.events.autocomplete.click", function(e, currentVM) {
         vm.set("value", currentVM.get());
         vm.set("__system.attrs.isFocus", false)
     });
@@ -235,7 +247,6 @@ function __initPattern(vm) {
     }, function setter(key, value, currentKey) {
         
     });
-
 }
 
 jSouper.modulesInit["form.text"] = function(vm) {
