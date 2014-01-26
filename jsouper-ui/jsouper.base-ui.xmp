@@ -128,11 +128,11 @@
         {{#if label}}
         <label>{{label}}</label>
         {{/if}}
-        <inputWrap class="{{#if disabled}} disabledMask{{/if}}{{#if __isFocus}} focusInput{{/if}} ">
+        <inputWrap class="{{#if disabled}} disabledMask{{/if}}{{#if __system.attrs.isFocus}} focusInput{{/if}} ">
             <!-- placeholder = "{{placeholder}}" -->
             {{#layout 'form.text.placeholder','$THIS',placeholder&&(!value)}}
-            <input type="text" class="jsouper-ui-input-text" jsouper-ui-id="{{__jsouper_ui_id}}" value="{{value}}" accessKey="{{accessKey}}" alt="{{alt}}" defaultValue="{{defaultValue}}" disabled="{{disabled}}" id="{{id}}" maxLength="{{maxLength}}" name="{{name}}" readOnly="{{readOnly}}" size="{{size}}" tabIndex="{{tabIndex}}" autocomplete="{{#if __autocomplete}}on{{#else}}off{{/if}}" form="{{'value'}}">
-            {{#layout 'form.text.autocomplete','$THIS',__close_sys_ac&&value&&__isFocus}}
+            <input type="text" class="jsouper-ui-input-text" value="{{value}}" accessKey="{{accessKey}}" alt="{{alt}}" defaultValue="{{defaultValue}}" disabled="{{disabled}}" id="{{id}}" maxLength="{{maxLength}}" name="{{name}}" readOnly="{{readOnly}}" size="{{size}}" tabIndex="{{tabIndex}}" autocomplete="{{#if __system.attrs.autocomplete}}on{{#else}}off{{/if}}" input="{{'value'}}">
+            {{#layout 'form.text.autocomplete','$THIS',__system.attrs.close_sys_ac&&value&&__system.attrs.isFocus}}
         </inputWrap>
     </formText>
 </xmp>
@@ -143,7 +143,7 @@
     <autocomplete>
         <autocompleteWrap>
             {{#each autocomplete}}
-            <autocompleteItem event-mousedown="{{'$PARENT.system.events.autocomplete'}}">{{$THIS}}</autocompleteItem>
+            <autocompleteItem event-mousedown="{{'$PARENT.__system.events.autocomplete'}}">{{$THIS}}</autocompleteItem>
             {{/each}}
         </autocompleteWrap>
     </autocomplete>

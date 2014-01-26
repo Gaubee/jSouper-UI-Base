@@ -10,12 +10,12 @@ function _initAutoComplete(vm) {
      */
     //输入时显示自动提示
     (data.events || (data.events = {}))["focus-show-autocomplete"] = function(e, currentVM) {
-        vm.set('__isFocus', true);
+        vm.set('__system.attrs.isFocus', true);
     };
     //离开时隐藏自动提示
     (data.events || (data.events = {}))["blur-hide-autocomplete"] = function(e, currentVM) {
         setTimeout(function() {
-            vm.set('__isFocus', false);
+            vm.set('__system.attrs.isFocus', false);
         });
     };
 
@@ -59,14 +59,14 @@ function _initAutoComplete(vm) {
                 acHandle = autocompleteHandle;
                 acArray = value;
             }
-            vm.set("__autocomplete", false);
-            vm.set("__close_sys_ac", true);
+            vm.set("__system.attrs.autocomplete", false);
+            vm.set("__system.attrs.close_sys_ac", true);
         } else {
             //布尔型
             acArray = false;
             acBoolean = value;
-            vm.set("__autocomplete", acBoolean);
-            vm.set("__close_sys_ac", false);
+            vm.set("__system.attrs.autocomplete", acBoolean);
+            vm.set("__system.attrs.close_sys_ac", false);
         }
     };
     _setParameter(data.autocomplete);
@@ -75,7 +75,7 @@ function _initAutoComplete(vm) {
     var tempLength = 0;
     data.autocomplete = Model.Observer(function getter(key, old_value /* === acArray*/ , currentKey) {
         if (!acArray) {
-            return vm.get("__autocomplete");
+            return vm.get("__system.attrs.autocomplete");
         }
         if (key === currentKey) {
 
@@ -125,8 +125,8 @@ function _initAutoComplete(vm) {
         return acArray;
     });
 
-    vm.set("system.events.autocomplete", function(e, currentVM) {
+    vm.set("__system.events.autocomplete", function(e, currentVM) {
         vm.set("value", currentVM.get());
-        vm.set("__isFocus", false)
+        vm.set("__system.attrs.isFocus", false)
     });
 };

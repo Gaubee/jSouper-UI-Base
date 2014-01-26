@@ -12,10 +12,10 @@ function _initVM(vm) {
     var events = data.events,
         eventKey, eventValue;
     var formatAttr = {
-        "__jsouper_ui_id": "{{__jsouper_ui_id}}"
+        "__jsouper_ui_id": "{{__system.attrs.id}}"
     };
     //设定唯一标志
-    vm.set("__jsouper_ui_id", jSouper.$.hashCode(vm, "__jsouper_ui_id"));
+    vm.set("__system.attrs.id", jSouper.$.hashCode(vm, "jsouper_ui_id"));
     //绑定自定义属性
     if (attrs) {
         for (attrKey in attrs) {
