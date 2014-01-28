@@ -1,14 +1,17 @@
 <xmp type='template' name='form.text'>
-    <formText bind-class="{{class}}">
+    <jsouperFormUi id="{{__system.attrs.id}}" bind-class="{{class}}">
         {{#if label}}
         <label>{{label}}</label>
         {{/if}}
-        <inputWrap class="{{#if disabled}} disabledMask{{/if}}{{#if __system.attrs.isFocus}} focusInput{{/if}} ">
+        <inputTextWrap class="{{#if disabled}} disabledMask{{/if}}{{#if __system.attrs.isFocus}} focusInput{{/if}}{{#if __system.attrs.isSubmitted&&__system.attrs.isSubmitted}} patternError{{/if}}">
             <!-- placeholder = "{{placeholder}}" -->
             {{#layout 'form.text.placeholder','$THIS',placeholder&&(!value)}}
-            <input type="text" class="jsouper-ui-input-text" value="{{value}}" accessKey="{{accessKey}}" alt="{{alt}}" defaultValue="{{defaultValue}}" disabled="{{disabled}}" id="{{id}}" maxLength="{{maxLength}}" name="{{name}}" readOnly="{{readOnly}}" size="{{size}}" tabIndex="{{tabIndex}}" autocomplete="{{#if __system.attrs.autocomplete}}on{{#else}}off{{/if}}" input="{{'value'}}">{{#layout 'form.text.autocomplete','autocomplete',__system.attrs.close_sys_ac&&value&&__system.attrs.isFocus}} {{#layout 'form.text.pattern','pattern',__system.attrs.pattern}}
-        </inputWrap>
-    </formText>
+            <input type="text" class="jsouper-ui-input-text" value="{{value}}" accessKey="{{accessKey}}" alt="{{alt}}" defaultValue="{{defaultValue}}" disabled="{{disabled}}" id="{{id}}" maxLength="{{maxLength}}" name="{{name}}" readOnly="{{readOnly}}" size="{{size}}" tabIndex="{{tabIndex}}" autocomplete="{{#if __system.attrs.autocomplete}}on{{#else}}off{{/if}}" input="{{'value'}}">
+            {{#layout 'form.text.autocomplete','autocomplete',__system.attrs.close_sys_ac&&value&&__system.attrs.isFocus}}
+            <!-- 这边绑定pattern，因为pattern_error属性依赖于pattern内部的触发，所以需要绑定'pattern'而不是'$THIS'来进行一次主动地触发getter函数，从而生成依赖，否则就得手动运行一次getter -->
+            {{#layout 'form.text.pattern','pattern',__system.attrs.pattern_error&&__system.attrs.isFocus&&__system.attrs.isSubmitted}}
+        </inputTextWrap>
+    </jsouperFormUi>
 </xmp>
 <xmp type='template' name='form.text.placeholder'>
     <placeholder>{{placeholder}}</placeholder>
@@ -24,9 +27,16 @@
 </xmp>
 <xmp type='template' name='form.text.pattern'>
     <pattern>
-        <patternHead>请与所请求的格式保持一致</patternHead>
-        <patternContent>
-            {{title}}
-        </patternContent>
+        <patternWrap event-mousedown="{{'$PARENT.__system.events.click.pattern'}}">
+            <patternHead>
+                <patternArrow>◇</patternArrow>
+                <patternArrowMark>◆</patternArrowMark>
+                <patternIcon>!</patternIcon>
+                <patternTitle>请与所请求的格式保持一致。</patternTitle>
+            </patternHead>
+            <patternContent>
+                {{$THIS}}
+            </patternContent>
+        </patternWrap>
     </pattern>
 </xmp>

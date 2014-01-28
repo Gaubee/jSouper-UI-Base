@@ -4,12 +4,12 @@ jSouper.ready(function() {
         Data: {
             form: {
                 login: [{
-                    label:"用户名",
-                    "class":"my-input",
+                    label: "用户名",
+                    "class": "my-input",
                     type: "text",
                     name: "username",
                     placeholder: "请输入用户名",
-                    autocomplete:["123","234","345","456"],
+                    autocomplete: ["123", "234", "345", "456"],
                     // autocomplete:function (value,vm) {
                     //     var result = ["@126.com","@163.com","@qq.com"];
                     //     for(var i = 0,len = result.length;i<len;i+=1){
@@ -18,17 +18,19 @@ jSouper.ready(function() {
                     //     return result;
                     // },
                     // autocomplete:true,
-                    autofocus:true,
-                    attrs:{
-                        id:"test",
-                        title:"{{placeholder}}"
+                    title:"呵呵呵",
+                    autofocus: true,
+                    pattern: /[A-z]{3}/,
+                    attrs: {
+                        id: "test",
+                        title: "{{placeholder}}"
                     },
-                    events:{
-                        click:function (e,vi) {
+                    events: {
+                        click: function(e, vi) {
                             console.log(e.type);
                         },
-                        dbclick:"{{'events.click'}}",
-                        mouseenter:function (e,vi) {
+                        dbclick: "{{'events.click'}}",
+                        mouseenter: function(e, vi) {
                             console.log("mouseEnter!!");
                         }
                     }

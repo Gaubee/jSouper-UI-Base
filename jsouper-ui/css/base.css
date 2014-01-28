@@ -1,4 +1,4 @@
-fieldset, form, label, legend {
+.jsouper-ui fieldset, .jsouper-ui form, .jsouper-ui label, .jsouper-ui legend {
     margin: 0;
     padding: 0;
     border: 0;
@@ -6,5 +6,6 @@ fieldset, form, label, legend {
     font: inherit;
     vertical-align: baseline;
 }
-.jsouper-ui {
+.jsouper-ui label {
+	display: block;
 }

@@ -5,7 +5,6 @@ function __initAutofocus(vm) {
         var inputNode = vm.queryElement({
             tagName: "INPUT"
         })[0];
-        console.log(inputNode);
         //页面加载时显示
         (data.events || (data.events = {}))["ready-autofocus"] = function(e, currentVM) {
             //确保在第一波View已经在append到页面上时，才进行自动对焦

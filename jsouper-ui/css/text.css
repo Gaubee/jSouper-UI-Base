@@ -1,5 +1,7 @@
-
-.jsouper-ui placeholder {
+/*
+ * 占位符样式
+ */
+ .jsouper-ui placeholder {
     width: 0;
     height: 0;
     color:#999;
@@ -10,9 +12,12 @@
     display: inline-block;
     *zoom:1;
 }
-.jsouper-ui inputWrap {
-    border: 1px inset;
-    /*border: 2px inset;*/
+/*
+ * 输入框模拟样式
+ */
+ .jsouper-ui inputTextWrap {
+    border: 1px solid #707070;
+    padding: 0 1px;
     border-image-source: initial;
     border-image-slice: initial;
     border-image-width: initial;
@@ -28,23 +33,38 @@
     display: inline-block;
     *zoom:1;
     text-align: start;
-    height: 18px;
-    width: 160px;
+    height: 19px;
+    width: 144px;
 }
-
-.jsouper-ui inputWrap.disabledMask{
-	background-color: #ebebe4;
-	color:#545454;
+.jsouper-ui inputTextWrap:hover{
+    border-color: #26a0da;
 }
-.jsouper-ui inputWrap.focusInput{
-    outline:1px inset #A4C6FD;
+/*
+ * 输入框验证错误时的样式
+ */
+.jsouper-ui inputTextWrap.patternError{
+    outline:3px solid #ff0000;
 }
-
-.jsouper-ui inputWrap placeholder{
-	color:#A9A9A9;
+/*
+ * 输入框禁用时的样式
+ */
+.jsouper-ui inputTextWrap.disabledMask {
+    background-color: #ebebe4;
+    color:#545454;
 }
-
-.jsouper-ui-input-text {
+/*
+ * 输入框焦点时的样式
+ */
+ .jsouper-ui inputTextWrap.focusInput {
+    border:1px solid #000;
+}
+.jsouper-ui inputTextWrap placeholder {
+    color:#A9A9A9;
+}
+/*
+ * 输入框默认样式禁用
+ */
+ .jsouper-ui-input-text {
     background: none;
     border: 0;
     padding: 0;
@@ -58,17 +78,19 @@
 .jsouper-ui-input-text:focus {
     outline:none;
 }
-
-.jsouper-ui autocomplete {
+/*
+ * 自动完成提示的样式
+ */
+ .jsouper-ui autocomplete {
     position: relative;
-    z-index: 2;
+    z-index: 200000;
     display: block;
     *zoom:1;
     left: -1px;
     top:0;
     height: 0;
 }
-.jsouper-ui autocompleteWrap{
+.jsouper-ui autocompleteWrap {
     display: block;
     position: absolute;
     border:1px solid #d2d4d8;
@@ -80,6 +102,72 @@
     line-height: 23px;
     padding: 0 3px;
 }
-.jsouper-ui autocompleteItem:hover{
-	background-color: #d2d4d8;
+.jsouper-ui autocompleteItem:hover {
+    background-color: #d2d4d8;
+}
+/*
+ * 验证错误时的提示
+ */
+ .jsouper-ui pattern {
+    height: 0;
+}
+.jsouper-ui patternWrap {
+    border: 1px solid #d2d4d8;
+    background-color: #FFF;
+    display: block;
+    min-width: 234px;
+    max-width: 268px;
+    min-height: 53px;
+    position: relative;
+    z-index: 200000;
+    top:8px;
+}
+.jsouper-ui patternHead {
+    display: block;
+    padding-top: 6px;
+    padding-left: 6px;
+    padding-bottom: 4px;
+    height: 18px;
+}
+.jsouper-ui patternArrow{
+    font-size: 12px;
+    line-height: 12px;
+    color:#d2d4d8;
+    display: inline-block;
+    *zoom:1;
+    width: 0;
+    height: 0;
+    position: relative;
+    top:-18px;
+}
+.jsouper-ui patternArrowMark{
+    font-size: 12px;
+    line-height: 12px;
+    color:#FFF;
+    display: inline-block;
+    *zoom:1;
+    width: 0;
+    height: 0;
+    position: relative;
+    top:-17px;
+}
+.jsouper-ui patternIcon {
+    height: 18px;
+    width: 18px;
+    display: inline-block;
+    *zoom:1;
+    background-color: #faab20;
+    color: #FFF;
+    text-align: center;
+    font-size: 18px;
+    line-height: 18px;
+    font-weight: bold;
+}
+
+.jsouper-ui patternTitle {
+    font-size: 14px;
+    line-height: 14px;
+    text-indent: 8px;
+    display: inline-block;
+    *zoom:1;
 }

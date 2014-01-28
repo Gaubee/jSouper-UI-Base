@@ -4,7 +4,7 @@
 
 //注意：这里由于其它属性中有也使用到事件绑定等功能，所以初始化一般要放到最后一部，来统一绑定属性
 
-function _initVM(vm) {
+function _initVM(vm, systemEvents) {
     var model = vm.model;
     var data = model._database || {};
     var attrs = data.attrs,
@@ -21,21 +21,23 @@ function _initVM(vm) {
     };
 
     //添加系统事件
-    jSouper.$.fI({
-        //聚焦时的属性
-        "event-focus-isFocus": function(e, currentVM) {
-            vm.set('__system.attrs.isFocus', true);
-        },
-        //失去焦点的属性
-        "event-hide-isFocus": function(e, currentVM) {
-            setTimeout(function() {
-                vm.set('__system.attrs.isFocus', false);
-            });
-        }
-    }, function(value, key) {
-        var mainKey = key.split("-"); //0:event-    1:event_name-    2:mainKey
-        var formatMainKey = "__system.events." + mainKey[2] + "." + mainKey[1];
-        console.log(formatMainKey);
+    systemEvents || (systemEvents = {});
+    systemEvents["event-focus-isFocus"] = function(e, currentVM) {
+        vm.set('__system.attrs.isFocus', true);
+    };
+    systemEvents["event-blur-isFocus"] = function(e, currentVM) {
+        setTimeout(function() {
+            if (vm.get("__system.attrs.stopBlur")) {
+                vm.set('__system.attrs.stopBlur', false);
+                return
+            }
+            vm.set('__system.attrs.isFocus', false);
+        }, 1);
+    }
+    jSouper.$.fI(systemEvents, function(value, key) {
+        var mainKey = key.split("-"); //0:event-    1:event_name-    2:mainKey 3...
+        mainKey.splice(0, 1);
+        var formatMainKey = "__system.events." + mainKey.join(".");
         formatAttr[key + hashCode] = "{{'" + formatMainKey + "'}}";
         vm.set(formatMainKey, value);
     });
@@ -68,6 +70,14 @@ function _initVM(vm) {
     vm.addAttr(vm.queryElement({
         tagName: "INPUT"
     }), formatAttr);
+
+    //将vm暴露到外部以供获取
+    var jSouperUiNode = vm.queryElement({
+        tagName: "JSOUPERFORMUI"
+    })[0];
+    if (jSouperUiNode) {
+        jSouper.queryHandle(jSouperUiNode).viewModel = vm;
+    }
 };
 
 var _baseUrl = "./jsouper-ui/";
@@ -104,6 +114,7 @@ function init_widgets() {
 /*
  * 自动完成的表单拓展，适合用在非password类的文本输入
  */
+
 function _initAutoComplete(vm) {
     var model = vm.model;
     var data = model._database || {};
@@ -138,31 +149,10 @@ function _initAutoComplete(vm) {
     var acHandle; //过滤函数
     var acResult; //保存过滤的结果
 
-    function _setParameter(value) {
-        if (value instanceof Object) {
-            if (value instanceof Function) {
-                //函数型
-                acHandle = acArray = value;
-            } else {
-                //数组型
-                acHandle = systemAutocompleteHandle;
-                acArray = value;
-            }
-            vm.set("__system.attrs.autocomplete", false);
-            vm.set("__system.attrs.close_sys_ac", true);
-        } else {
-            //布尔型
-            acArray = false;
-            acBoolean = value;
-            vm.set("__system.attrs.autocomplete", acBoolean);
-            vm.set("__system.attrs.close_sys_ac", false);
-        }
-    };
-    _setParameter(data.autocomplete);
+    var old_value = data.autocomplete;
 
     var tempValue;
-    var tempLength = 0;
-    data.autocomplete = Model.Observer(function getter(key, old_value /* === acArray*/ , currentKey) {
+    vm.set("autocomplete", Model.Observer(function getter(key, old_value /* === acArray*/ , currentKey) {
         if (!acArray) {
             return vm.get("__system.attrs.autocomplete");
         }
@@ -202,9 +192,27 @@ function _initAutoComplete(vm) {
     }, function setter(key, value, currentKey) {
         if (currentKey === key &&
             //触发来自外部而不是自身的touchOff所触发的set(get())
-            acResult !== value) {
+            acResult !== value && value) {
             //重置参数形式
-            _setParameter(value);
+
+            if (value instanceof Object) {
+                if (value instanceof Function) {
+                    //函数型
+                    acHandle = acArray = value;
+                } else {
+                    //数组型
+                    acHandle = systemAutocompleteHandle;
+                    acArray = value;
+                }
+                vm.set("__system.attrs.autocomplete", false);
+                vm.set("__system.attrs.close_sys_ac", true);
+            } else {
+                //布尔型
+                acArray = false;
+                acBoolean = value;
+                vm.set("__system.attrs.autocomplete", acBoolean);
+                vm.set("__system.attrs.close_sys_ac", false);
+            }
             //滞空缓存
             tempValue = undefined;
         }
@@ -212,7 +220,9 @@ function _initAutoComplete(vm) {
             return acBoolean;
         }
         return acArray;
-    });
+    }));
+
+    vm.set("autocomplete", old_value);
 
     vm.set("__system.events.autocomplete.click", function(e, currentVM) {
         vm.set("value", currentVM.get());
@@ -227,7 +237,6 @@ function __initAutofocus(vm) {
         var inputNode = vm.queryElement({
             tagName: "INPUT"
         })[0];
-        console.log(inputNode);
         //页面加载时显示
         (data.events || (data.events = {}))["ready-autofocus"] = function(e, currentVM) {
             //确保在第一波View已经在append到页面上时，才进行自动对焦
@@ -253,42 +262,70 @@ function __initPattern(vm) {
     var inputNode = vm.queryElement({
         tagName: "INPUT"
     })[0];
+
     //不论系统是否支持pattern属性，统一用自定义的。这样样式能得到统一
     //闭包保存的正则验证
-    var pattern;
-    var patternHandle = systemPatternHandle;
+    var patternRule;
+    var patternReault;
+    var patternHandle;
 
     function systemPatternHandle(value) {
-
-    };
-
-    function _setParameter(value) {
-        if (typeof value === "string") {
-            pattern = new RegExp(value);
-        } else if (value instanceof RegExp) {
-            pattern = value
-        } else if (value instanceof Function) {
-            pattern = null;
-
+        //确保title的变动也会引发pattern值的变动，所以提到if-else逻辑外面
+        var result = vm.get("title");
+        if (patternRule.test(value)) {
+            vm.set("__system.attrs.pattern_error", false);
         } else {
-            throw TypeError("Error Parameter Type!");
+            vm.set("__system.attrs.pattern_error", true);
+            return new String(result)
         }
     };
-    data.pattern && _setParameter(data.pattern);
+    var old_value = data.pattern;
 
-    data.pattern = Model.Observer(function getter(key, old_value, currentKey) {
-
+    vm.set("pattern", Model.Observer(function getter(key, old_value, currentKey) {
+        var value = vm.get("value");
+        //这里不用缓存判断，因为要确保title的值改变能起正确的作用
+        if (patternRule || patternHandle) {
+            patternReault = patternHandle(value);
+        }
+        return patternReault;
     }, function setter(key, value, currentKey) {
         //这里无需绑定，所以setter无需返回值，因此，如果是系统的set(get())，value将是空的
-        if (value) {
-            _setParameter(value);
+        if (value && value !== patternReault) {
+            if (typeof value === "string") {
+                patternRule = new RegExp(value);
+                patternHandle = systemPatternHandle;
+            } else if (value instanceof RegExp) {
+                patternRule = value;
+                patternHandle = systemPatternHandle;
+            } else if (value instanceof Function) {
+                patternRule = null;
+                patternHandle = value;
+            }
         }
-    });
+    }));
 
-    vm.set("__system.events.autocomplete.click", function(e, currentVM) {
-        vm.set("value", currentVM.get());
-        vm.set("__system.attrs.isFocus", false)
-    });
+    vm.set("pattern", old_value);
+    //初始化条件又依赖于其内部（Observer），无法自动触发。所以手动Get一次进行依赖生成
+    vm.get("pattern", old_value);
+
+    //输入框提交时转化为验证错误的状态的判定条件
+    vm.set("__system.attrs.show_pattern_error", Model.Observer(function() {
+        var pattern_error = vm.get("__system.attrs.pattern_error");
+        // var isFocus = vm.get("__system.attrs.isFocus");
+        var isSubmitted = vm.get("__system.attrs.isSubmitted");
+        var result = pattern_error && isSubmitted;
+        return result;
+    }));
+
+    //点击错误提示的事件，依旧保持input node的焦点
+    vm.set("__system.events.click.pattern", function() {
+        //阻止stopBlur事件发生
+        vm.set('__system.attrs.stopBlur', true);
+        //在blur事件过后再次聚焦
+        setTimeout(function (argument) {
+            inputNode.focus();
+        })
+    })
 }
 
 jSouper.modulesInit["form.text"] = function(vm) {
@@ -299,6 +336,37 @@ jSouper.modulesInit["form.text"] = function(vm) {
     //添加自动对焦功能
     __initAutofocus(vm);
 
+    //添加验证功能
+    __initPattern(vm);
+
     //进行通用的表单初始化函数进行初始化配置
     _initVM(vm);
+};
+
+jSouper.modulesInit["form.submit"] = function(vm) {
+
+    //缓存input节点
+    var inputNode = vm.queryElement({
+        tagName: "INPUT"
+    })[0];
+
+    var systemEvents = {
+        "event-click-pattern": function() {
+            var formNode = inputNode.form;
+            var jsouperFormUis = formNode.getElementsByTagName("jsouperFormUi");
+            var goSubmit = true;
+            jSouper.$.E(jsouperFormUis, function(jsouperFormUi) {
+                var jsouperFormUiHandle = jSouper.queryHandle(jsouperFormUi);
+                if (jsouperFormUiHandle) {
+                    var jsouperFormUiVM = jsouperFormUiHandle.viewModel;
+                    jsouperFormUiVM.set("__system.attrs.isSubmitted", true);
+                    goSubmit = goSubmit && !jsouperFormUiVM.get("__system.attrs.pattern_error");
+                }
+            })
+            return goSubmit;
+        }
+    }
+
+    //进行通用的表单初始化函数进行初始化配置
+    _initVM(vm, systemEvents);
 };

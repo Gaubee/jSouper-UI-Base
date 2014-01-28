@@ -1,6 +1,7 @@
 /*
  * 自动完成的表单拓展，适合用在非password类的文本输入
  */
+
 function _initAutoComplete(vm) {
     var model = vm.model;
     var data = model._database || {};
@@ -35,31 +36,10 @@ function _initAutoComplete(vm) {
     var acHandle; //过滤函数
     var acResult; //保存过滤的结果
 
-    function _setParameter(value) {
-        if (value instanceof Object) {
-            if (value instanceof Function) {
-                //函数型
-                acHandle = acArray = value;
-            } else {
-                //数组型
-                acHandle = systemAutocompleteHandle;
-                acArray = value;
-            }
-            vm.set("__system.attrs.autocomplete", false);
-            vm.set("__system.attrs.close_sys_ac", true);
-        } else {
-            //布尔型
-            acArray = false;
-            acBoolean = value;
-            vm.set("__system.attrs.autocomplete", acBoolean);
-            vm.set("__system.attrs.close_sys_ac", false);
-        }
-    };
-    _setParameter(data.autocomplete);
+    var old_value = data.autocomplete;
 
     var tempValue;
-    var tempLength = 0;
-    data.autocomplete = Model.Observer(function getter(key, old_value /* === acArray*/ , currentKey) {
+    vm.set("autocomplete", Model.Observer(function getter(key, old_value /* === acArray*/ , currentKey) {
         if (!acArray) {
             return vm.get("__system.attrs.autocomplete");
         }
@@ -99,9 +79,27 @@ function _initAutoComplete(vm) {
     }, function setter(key, value, currentKey) {
         if (currentKey === key &&
             //触发来自外部而不是自身的touchOff所触发的set(get())
-            acResult !== value) {
+            acResult !== value && value) {
             //重置参数形式
-            _setParameter(value);
+
+            if (value instanceof Object) {
+                if (value instanceof Function) {
+                    //函数型
+                    acHandle = acArray = value;
+                } else {
+                    //数组型
+                    acHandle = systemAutocompleteHandle;
+                    acArray = value;
+                }
+                vm.set("__system.attrs.autocomplete", false);
+                vm.set("__system.attrs.close_sys_ac", true);
+            } else {
+                //布尔型
+                acArray = false;
+                acBoolean = value;
+                vm.set("__system.attrs.autocomplete", acBoolean);
+                vm.set("__system.attrs.close_sys_ac", false);
+            }
             //滞空缓存
             tempValue = undefined;
         }
@@ -109,7 +107,9 @@ function _initAutoComplete(vm) {
             return acBoolean;
         }
         return acArray;
-    });
+    }));
+
+    vm.set("autocomplete", old_value);
 
     vm.set("__system.events.autocomplete.click", function(e, currentVM) {
         vm.set("value", currentVM.get());
